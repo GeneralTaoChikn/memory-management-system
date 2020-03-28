@@ -3,6 +3,9 @@ package edu.odu.cs.cs471;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JList;
+import java.awt.BorderLayout;
 
 public class memoryGUI {
 
@@ -36,8 +39,14 @@ public class memoryGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 1000, 680);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JList list = new JList();
+		frame.getContentPane().add(list, BorderLayout.WEST);
+		
+		JList list_1 = new JList();
+		frame.getContentPane().add(list_1, BorderLayout.NORTH);
 	}
 
 }

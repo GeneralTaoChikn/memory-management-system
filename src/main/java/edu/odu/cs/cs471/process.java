@@ -1,5 +1,7 @@
 package edu.odu.cs.cs471;
 
+import java.util.List;
+
 public class process {
 	
 	private String ProcessName;
@@ -7,6 +9,7 @@ public class process {
 	private int pageNum;
 	private String location;
 	private boolean inUse;
+	private int whichBlock;
 	
 	public process() {
 		ProcessName = "";
@@ -74,6 +77,19 @@ public class process {
 				"Page #: " + this.pageNum + '\n' +
 				"Location: " + this.location ;
 				
+	}
+	
+	public void checkifPartittionFits (List<Partition> doesItFit) {
+		
+		for (int i = 0; i < doesItFit.size(); i++) {
+			if(doesItFit.get(i).getfreeSpace() > this.size) {
+				doesItFit.get(i).setOccupied(true);
+				this.inUse = true;
+				
+				
+			}
+		}
+
 	}
 	
 }
