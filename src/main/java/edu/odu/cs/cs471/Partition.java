@@ -6,10 +6,13 @@ public class Partition {
 	private double freeSpace;
 	private boolean occupied;
 	
+	/**
+	 * Constructor
+	 */
 	public Partition(){
 		this.id = 0;
 		this.freeSpace = 0;
-		this.occupied = false
+		this.occupied = false;
 	}
 	
 	public void setID(int ID) {
@@ -22,7 +25,7 @@ public class Partition {
 	}
 	
 	public void setOccupied(boolean a) {
-		this.occupied = a
+		this.occupied = a;
 	}
 
 

@@ -13,7 +13,7 @@ public class process {
 	
 	public process() {
 		ProcessName = "";
-		size = 0;
+		size = randomNumGen.genSize();
 		pageNum = 0;
 		location = "";
 		inUse = false;
@@ -86,6 +86,7 @@ public class process {
 				doesItFit.get(i).setOccupied(true);
 				this.inUse = true;
 				
+				this.whichBlock = i;
 				
 			}
 		}
