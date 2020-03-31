@@ -10,11 +10,15 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.event.ActionEvent;
 
 public class memoryGUI {
 
 	private JFrame frame;
-	private JTextField textField;
+	private JTextField App2Launch;
 
 	/**
 	 * Launch the application.
@@ -48,42 +52,110 @@ public class memoryGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(39, 559, 116, 22);
-		frame.getContentPane().add(textField);
-		textField.setColumns(10);
+		List <Partition> partitions = Partition.prepopulate();
+		List <process> processes = new ArrayList<process> ();
 		
-		JButton btnLaunch = new JButton("Launch");
-		btnLaunch.setBounds(204, 558, 97, 25);
-		frame.getContentPane().add(btnLaunch);
+		String procLst, prtLst, rnLst, procInfo;
 		
-		JLabel lblProcess = new JLabel("Process");
-		lblProcess.setBounds(39, 542, 56, 16);
-		frame.getContentPane().add(lblProcess);
 		
-		JButton btnTerminate = new JButton("Terminate");
-		btnTerminate.setBounds(345, 558, 97, 25);
-		frame.getContentPane().add(btnTerminate);
+		/**
+		 * Process to Launch
+		 */
+		App2Launch = new JTextField();
+		App2Launch.setBounds(39, 559, 116, 22);
+		frame.getContentPane().add(App2Launch);
+		App2Launch.setColumns(10);
 		
-		JButton btnStatus = new JButton("Status.");
-		btnStatus.setBounds(494, 558, 97, 25);
-		frame.getContentPane().add(btnStatus);
-		
-		JTextPane textPane = new JTextPane();
-		textPane.setBounds(663, 415, 279, 178);
-		frame.getContentPane().add(textPane);
-		
+//======================================================================		
+		/**
+		 * ProcessList TextPane
+		 */
 		JTextPane ProcessList = new JTextPane();
 		ProcessList.setBounds(39, 52, 279, 429);
 		frame.getContentPane().add(ProcessList);
 		
+		/**
+		 * Partitions TextPane
+		 */
 		JTextPane Partitions = new JTextPane();
 		Partitions.setBounds(351, 52, 259, 435);
 		frame.getContentPane().add(Partitions);
 		
+		/**
+		 * Running TextPane
+		 */
 		JTextPane Running = new JTextPane();
 		Running.setBounds(663, 52, 273, 334);
 		frame.getContentPane().add(Running);
+		
+		/**
+		 * ProcessInfo TextPane
+		 */
+		JTextPane ProcessInfo = new JTextPane();
+		ProcessInfo.setBounds(663, 415, 279, 178);
+		frame.getContentPane().add(ProcessInfo);
+		
+//======================================================================
+		/**
+		 * Launch
+		 */
+		JButton btnLaunch = new JButton("Launch");
+		btnLaunch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//add Process
+				processes.add(new process(App2Launch.getText(), processes.size() - 57));
+				App2Launch.setText("");
+				
+				//check if process fits in a partition
+				for (int i = 0; i < processes.size(); i++) {
+					processes.get(i).checkifPartittionFits(partitions);
+				}
+				
+				//update output
+				ProcessList.setText(process.toListString(processes));
+				Partition.toListString(partitions);
+			}
+		});
+		btnLaunch.setBounds(204, 558, 97, 25);
+		frame.getContentPane().add(btnLaunch);
+		
+		/**
+		 * Terminate
+		 */
+		JButton btnTerminate = new JButton("Terminate");
+		btnTerminate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int i = 0;
+				do {
+					if (processes.get(i).getinUse()) {
+						processes.remove(i);
+					}
+				}while(!processes.get(i).getinUse());
+
+			}
+		});
+		btnTerminate.setBounds(345, 558, 97, 25);
+		frame.getContentPane().add(btnTerminate);
+		
+		/**
+		 * Status
+		 */
+		JButton btnStatus = new JButton("Status");
+		btnStatus.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnStatus.setBounds(529, 558, 97, 25);
+		frame.getContentPane().add(btnStatus);
+		
+//======================================================================
+		/**
+		 * JLabels
+		 */
+		JLabel lblProcess = new JLabel("Process");
+		lblProcess.setBounds(39, 542, 56, 16);
+		frame.getContentPane().add(lblProcess);
 		
 		JLabel lblProcesses = new JLabel("Processes");
 		lblProcesses.setBounds(39, 25, 82, 16);
@@ -100,5 +172,7 @@ public class memoryGUI {
 		JLabel lblProcessInformation = new JLabel("Process Information");
 		lblProcessInformation.setBounds(663, 396, 116, 16);
 		frame.getContentPane().add(lblProcessInformation);
+
 	}
+
 }
