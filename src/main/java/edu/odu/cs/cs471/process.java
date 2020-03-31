@@ -22,7 +22,7 @@ public class process {
 		pageNum = 0;
 		location = "";
 		inUse = false;
-		
+		whichBlock = -1;
 	}
 	
 	/**
@@ -37,6 +37,7 @@ public class process {
 		pageNum = 0;
 		location = "";
 		inUse = false;
+		whichBlock = -1;
 	}
 	
 //	/**
@@ -76,6 +77,9 @@ public class process {
 		this.inUse = processing;
 	}
 	
+	public void setwichBlock (int block) {
+		this.whichBlock = block;
+	}
 	
 //	/**
 //	 * Retrieve Process Name
@@ -85,8 +89,16 @@ public class process {
 //		return this.ProcessName;
 //	}
 	
+	public int getProcNum () {
+		return this.ProcessNum;
+	}
+	
 	public boolean getinUse () {
 		return this.inUse;
+	}
+	
+	public int getwhichBlock () {
+		return this.whichBlock;
 	}
 	
 	/**@override
@@ -96,8 +108,8 @@ public class process {
 	public String toString(String toPrint) {
 		//print List
 		if (toPrint.equals("List"))
-			return this.ProcessNum +':' +" Process Name: " + this.ProcessName + "  " +
-				"Size: " + this.size + "  " + '\n';
+			return this.ProcessNum +':' +" Process : " + this.ProcessName + "  " +
+				"Size: " + this.size + " Kb" + '\n';
 		
 		//Print Status
 		else
@@ -124,13 +136,18 @@ public class process {
 	}
 	
 	public void checkifPartittionFits (List<Partition> doesItFit) {
+		boolean allocated = false;
 		
 		for (int i = 0; i < doesItFit.size(); i++) {
+
+			if ((doesItFit.get(i).getOccupied() == false) && (allocated == false))
 			if(doesItFit.get(i).getfreeSpace() > this.size) {
 				doesItFit.get(i).setOccupied(true);
-				
+				doesItFit.get(i).setassignedTo(Integer.toString(this.ProcessNum+58));
+				doesItFit.get(i).setfreeSpace(this.size);				
 				this.inUse = true;		
-				this.whichBlock = i;	
+				this.whichBlock = i;
+				allocated = true;
 			}
 		}
 

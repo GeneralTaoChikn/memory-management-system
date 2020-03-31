@@ -19,7 +19,8 @@ public class memoryGUI {
 
 	private JFrame frame;
 	private JTextField App2Launch;
-
+	private int processCount = 0;
+	private JTextField ProcStatus;
 	/**
 	 * Launch the application.
 	 */
@@ -54,8 +55,7 @@ public class memoryGUI {
 		
 		List <Partition> partitions = Partition.prepopulate();
 		List <process> processes = new ArrayList<process> ();
-		
-		String procLst, prtLst, rnLst, procInfo;
+		processes.clear();
 		
 		
 		/**
@@ -66,27 +66,31 @@ public class memoryGUI {
 		frame.getContentPane().add(App2Launch);
 		App2Launch.setColumns(10);
 		
-//======================================================================		
+		ProcStatus = new JTextField();
+		ProcStatus.setBounds(454, 559, 63, 22);
+		frame.getContentPane().add(ProcStatus);
+		ProcStatus.setColumns(10);
+		
 		/**
-		 * ProcessList TextPane
+		 * Process List
 		 */
 		JTextPane ProcessList = new JTextPane();
-		ProcessList.setBounds(39, 52, 279, 429);
+		ProcessList.setBounds(12, 52, 305, 435);
 		frame.getContentPane().add(ProcessList);
 		
 		/**
 		 * Partitions TextPane
 		 */
-		JTextPane Partitions = new JTextPane();
-		Partitions.setBounds(351, 52, 259, 435);
-		frame.getContentPane().add(Partitions);
+		JTextPane Running = new JTextPane();
+		Running.setBounds(329, 52, 305, 435);
+		frame.getContentPane().add(Running);
 		
 		/**
 		 * Running TextPane
 		 */
-		JTextPane Running = new JTextPane();
-		Running.setBounds(663, 52, 273, 334);
-		frame.getContentPane().add(Running);
+		JTextPane Partitions = new JTextPane();
+		Partitions.setBounds(663, 52, 273, 334);
+		frame.getContentPane().add(Partitions);
 		
 		/**
 		 * ProcessInfo TextPane
@@ -103,7 +107,9 @@ public class memoryGUI {
 		btnLaunch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//add Process
-				processes.add(new process(App2Launch.getText(), processes.size() - 57));
+//				processes.add(new process(App2Launch.getText(), processes.size() - 57));
+				processes.add(new process(App2Launch.getText(), processCount - 57));
+				processCount++;
 				App2Launch.setText("");
 				
 				//check if process fits in a partition
@@ -113,7 +119,8 @@ public class memoryGUI {
 				
 				//update output
 				ProcessList.setText(process.toListString(processes));
-				Partition.toListString(partitions);
+				Running.setText(Partition.toListString(partitions,"used"));
+				Partitions.setText(Partition.toListString(partitions, "free"));
 			}
 		});
 		btnLaunch.setBounds(204, 558, 97, 25);
@@ -126,17 +133,41 @@ public class memoryGUI {
 		btnTerminate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				int i = 0;
+				
+				int p = 0;
+				boolean rmvElement = false;
+				
 				do {
-					if (processes.get(i).getinUse()) {
-						processes.remove(i);
+					if (processes.get(p).getinUse() == true) {
+						
+						//reset allocated partition
+						partitions.get(processes.get(p).getwhichBlock()).resetPartition();
+						Running.setText(Partition.toListString(partitions, "used"));
+						
+						//remove process
+						processes.remove(p);
+						//if executed, exit while loop
+						rmvElement = true;
+						for (int i = 0; i < processes.size(); i++) {
+							processes.get(i).checkifPartittionFits(partitions);
+						}
 					}
-				}while(!processes.get(i).getinUse());
+					
+					p++;
+				}while(rmvElement == false  || p < processes.size());
+				
+				//update output
+				ProcessList.setText(process.toListString(processes));
+				Running.setText(Partition.toListString(partitions,"used"));
+				Partitions.setText(Partition.toListString(partitions, "free"));
+				
+//				App2Launch.setText(Integer.toString(processes.size()));
 
 			}
 		});
-		btnTerminate.setBounds(345, 558, 97, 25);
+		btnTerminate.setBounds(311, 558, 97, 25);
 		frame.getContentPane().add(btnTerminate);
+		
 		
 		/**
 		 * Status
@@ -144,6 +175,21 @@ public class memoryGUI {
 		JButton btnStatus = new JButton("Status");
 		btnStatus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int n = Integer.parseInt(ProcStatus.getText());
+				int i = 0;
+				do {
+					if ((processes.get(i).getProcNum() != n))
+						i++;
+					else
+						ProcessInfo.setText(processes.get(i-1).toString(""));
+					
+				}while((i < processes.size()) &&(processes.get(i).getProcNum() != n));
+//				for (int i = 0; i < processes.size(); i++) {
+//					if (Integer.compare(processes.get(i).getProcNum(), n))
+//						ProcessInfo.setText(processes.get(i).toString(""));
+//				}
+//				
+				ProcStatus.setText("");
 			}
 		});
 		btnStatus.setBounds(529, 558, 97, 25);
@@ -174,5 +220,4 @@ public class memoryGUI {
 		frame.getContentPane().add(lblProcessInformation);
 
 	}
-
 }

@@ -6,6 +6,7 @@ import java.util.List;
 public class Partition {
 	
 	private int id;
+	private String assignedTo;
 	private double occupiedSpace;
 	private double freeSpace;
 	private boolean occupied;
@@ -15,6 +16,7 @@ public class Partition {
 	 */
 	public Partition(){
 		this.id = 0;
+		this.assignedTo = "";
 		this.occupiedSpace = 0;
 		this.freeSpace = 0;
 		this.occupied = false;
@@ -27,6 +29,7 @@ public class Partition {
 	 */
 	public Partition (int num, double free) {
 		id = num;
+		assignedTo = "";
 		occupiedSpace = 0;
 		freeSpace = free;
 		occupied = false;
@@ -38,9 +41,10 @@ public class Partition {
 //		
 //	}
 //	
-//	public void setfreeSpace(double fs) {
-//		this.freeSpace = fs;
-//	}
+	public void setfreeSpace(double fs) {
+		this.freeSpace = this.freeSpace - fs;
+		this.occupiedSpace = fs;
+	}
 	
 	/**
 	 * Designate if partition is being used
@@ -48,6 +52,10 @@ public class Partition {
 	 */
 	public void setOccupied(boolean a) {
 		this.occupied = a;
+	}
+	
+	public void setassignedTo (String proc) {
+		this.assignedTo = proc;
 	}
 
 
@@ -59,6 +67,10 @@ public class Partition {
 		return this.id;
 	}
 	
+	public boolean getOccupied() {
+		return this.occupied;
+	}
+	
 	
 	/**
 	 * This would be used to determine if process can be run
@@ -68,7 +80,16 @@ public class Partition {
 		return this.freeSpace;
 	}
 	
-	public String toString(String toPrint) {
+	public void resetPartition () {
+		this.assignedTo = "";
+		this.freeSpace = freeSpace + occupiedSpace;
+		this.occupiedSpace = 0;
+		this.occupied = false;
+		
+		
+	}
+	
+	public String toString() {
 		//print List
 		String use = "";
 		if (this.occupied)
@@ -77,17 +98,29 @@ public class Partition {
 			use = "UnUsed";
 		
 		return "Partition ID: " + this.id + "  " +
-				"Used Space: " + this.occupiedSpace + "  " +
-				"Free Space: " + this.freeSpace + "  " +
-				use + '\n' ;
+				"UsedSpace: " + this.occupiedSpace + "  " +
+				"FreeSpace: " + this.freeSpace + "  " + 
+				use +  "allocated toproce Num: " + assignedTo + '\n' + '\n';
 				
 	}
 	
-	public static String toListString(List<Partition> print) {
+	
+	public static String toListString(List<Partition> print, String utl) {
 		String toPrint = "";
-		
-		for (int i = 0; i < print.size(); i++) {
-			toPrint += print.get(i).toString();
+//		int a = print.size();
+//		String toPrint = Integer.toString(a);
+
+		for (int i = 0; i != print.size(); i++) {
+			
+			//build Used Text
+			if(utl.contentEquals("used"))
+				if(print.get(i).getOccupied() == true)
+					toPrint += print.get(i).toString();
+			//build free info
+			if(utl.contentEquals("free"))
+				if(print.get(i).getOccupied() == false)
+					toPrint += print.get(i).toString();
+			
 		}
 		
 		return toPrint;
