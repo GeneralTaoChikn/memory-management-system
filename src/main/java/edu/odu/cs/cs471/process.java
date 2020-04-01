@@ -3,6 +3,8 @@ package edu.odu.cs.cs471;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 public class process {
 	
 	private String ProcessName;
@@ -39,7 +41,7 @@ public class process {
 		pageNum = 0;
 		location = "";
 		inUse = false;
-		whichBlock = -1;
+		whichBlock = 0;
 	}
 //======================================================================
 ///Setters
@@ -62,13 +64,6 @@ public class process {
 	 * TODO generate random PageNumber
 	 */
 	public void setpageNum () {
-		
-	}
-	
-	/**
-	 * TODO generate random Location
-	 */
-	public void setlocation () {
 		
 	}
 	
@@ -112,8 +107,8 @@ public class process {
 	public String toString(String toPrint) {
 		//print List
 		if (toPrint.equals("List"))
-			return this.ProcessNum +':' +" Process: " + this.ProcessName + "  " +
-				"Size: " + this.size + " Kb" + '\n';
+			return " Process: " + this.ProcessName + "  " +
+				"Size: " + this.size + " Mb" + '\n';
 		
 		//Print Status
 		else
@@ -132,14 +127,18 @@ public class process {
 	public static String toListString(List<process> print) {
 		String toPrint = "";
 		
-		for (int i = 0; i < print.size(); i++) {
-			toPrint += print.get(i).toString("List");
+		for (process ptr : print) {
+			toPrint += ptr.toString("List");
 		}
+		
+//		for (int i = 0; i < print.size(); i++) {
+//			toPrint += print.get(i).toString("List");
+//		}
 		
 		return toPrint;
 	}
 	
-	public void checkifPartittionFits (List<Partition> doesItFit) {
+	public boolean checkifPartittionFits (List<Partition> doesItFit) {
 		boolean allocated = false;
 
 		for (int i = 0; i < doesItFit.size(); i++) {
@@ -147,8 +146,10 @@ public class process {
 			if ((doesItFit.get(i).getOccupied() == false) && (allocated == false)) {
 				if(doesItFit.get(i).getfreeSpace() > this.size) {
 					doesItFit.get(i).setOccupied(true);
-					doesItFit.get(i).setassignedTo(Integer.toString(this.ProcessNum+58));
-					doesItFit.get(i).setfreeSpace(this.size);
+//					doesItFit.get(i).setassignedTo(Integer.toString(this.ProcessNum+58));
+					doesItFit.get(i).setassignedTo(this.ProcessName);
+					doesItFit.get(i).setOcSpace(this.size);
+					doesItFit.add(doesItFit.get(i).splitPartition(doesItFit.size()));
 					this.pageNum = 0;
 					this.location = "Main Memory";
 					this.inUse = true;		
@@ -162,6 +163,14 @@ public class process {
 				}
 			}	
 		}
+		
+//		if (allocated == false) {
+//			//Throw error message
+//			JOptionPane.showMessageDialog(null, "Insufficient Memory: " + this.ProcessName + 
+//					" cannot run", "Ohhh NO! Error!", JOptionPane.INFORMATION_MESSAGE);
+//		}
+		
+		return allocated;
 
 	}
 	
@@ -177,7 +186,7 @@ public class process {
         int rand_int; 
         // Generate random integers in range 0 to 5 
         do {
-        	rand_int = rand.nextInt(1000) % 20 ; 
+        	rand_int = rand.nextInt(1000) % 800 ; 
         }while (rand_int < 120);
  
         return rand_int;

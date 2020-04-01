@@ -42,9 +42,13 @@ public class Partition {
 	 * Assign FreeSpace
 	 * @param fs
 	 */
-	public void setfreeSpace(double fs) {
-		this.freeSpace = this.freeSpace - fs;
-		this.occupiedSpace = fs;
+	public void setOcSpace(double os) {
+		this.occupiedSpace = os;
+		this.freeSpace = this.freeSpace - os;
+	}
+	
+	public void setFreeSpace (double fs) {
+		freeSpace = fs;
 	}
 	
 	/**
@@ -83,41 +87,46 @@ public class Partition {
 	
 	public void resetPartition () {
 		this.assignedTo = "";
-		this.freeSpace = freeSpace + occupiedSpace;
+		this.freeSpace = occupiedSpace;
 		this.occupiedSpace = 0;
 		this.occupied = false;	
 	}
 	
-	public Partition splitPartition (Partition toSplit) {
-		Partition newPart = new Partition();
-		//TODO Split an existing partion
-		
-		
-		
+	public Partition splitPartition (int id) {
+		Partition newPart = new Partition(id, this.freeSpace);
+		this.setFreeSpace(0);
+
 		return newPart;
 	}
 	
-	public void collectGarbage (Partition toCollect) {
+	public static void collectGarbage (List <Partition> toCollect) {
 		//TODO Implement an Algorithm to best compact garbage.
 		//Take free space from occupied memory and put it back into main
-			
-		//Collects Free Space from the unallocated data
-		this.freeSpace = this.freeSpace + toCollect.getfreeSpace();
-		toCollect.setfreeSpace(0);
+		double freeTotal = 0;
+		for (int j = 0; j < toCollect.size(); j++) {
+			for (int i = 0; i < toCollect.size(); ++i) {
+				if (toCollect.get(i).getOccupied() == false) {
+						freeTotal += toCollect.get(i).getfreeSpace();
+						toCollect.get(i).setFreeSpace(0);
+//			if(toCollect.get(i).occupied == false) {
+						toCollect.remove(i);
+				}
+			}
+		}
+		freeTotal = freeTotal + toCollect.get(toCollect.size()-1).freeSpace;
 		
+		//Prevents deletion of currently used blocks
+		if (toCollect.get(toCollect.size()-1).getOccupied() == false)
+			toCollect.remove(toCollect.size()-1);
+		
+		toCollect.add(new Partition (toCollect.size(),freeTotal));
 	}
 	
 	public String toString() {
-		//print List
-//		String use = "";
-//		if (this.occupied)
-//			use = "inUse";
-//		else
-//			use = "UnUsed";
-		
+		//print List		
 		return "Partition ID: " + this.id + "  " +
-				"UsedSpace: " + this.occupiedSpace + "  " +
-				"FreeSpace: " + this.freeSpace + "  " + 
+				"UsedSpace: " + this.occupiedSpace + "Mb  " +
+				"FreeSpace: " + this.freeSpace + "Mb  " + 
 				"Assigned To: " + assignedTo + '\n' + '\n';
 				
 	}
@@ -128,16 +137,15 @@ public class Partition {
 //		int a = print.size();
 //		String toPrint = Integer.toString(a);
 
-		for (int i = 0; i != print.size(); i++) {
-			
+		for (Partition i : print) {
 			//build Used Text
 			if(utl.contentEquals("used"))
-				if(print.get(i).getOccupied() == true)
-					toPrint += print.get(i).toString();
+				if(i.getOccupied() == true)
+					toPrint += i.toString();
 			//build free info
 			if(utl.contentEquals("free"))
-				if(print.get(i).getOccupied() == false)
-					toPrint += print.get(i).toString();
+				if(i.getOccupied() == false)
+					toPrint += i.toString();
 			
 		}
 		
