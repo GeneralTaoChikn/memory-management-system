@@ -157,7 +157,7 @@ public class memoryGUI {
 								" cannot run", "Ohhh NO! Error!", JOptionPane.INFORMATION_MESSAGE);
 					}
 				
-				
+					processSize.setText("");
 					App2Launch.setText("");
 					//update output
 					ProcessList.setText(process.toListString(processes));
