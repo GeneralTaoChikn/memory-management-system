@@ -17,13 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
-
+/**
+ * File for running  GUI
+ * @author Christopher Diasanta
+ *
+ */
 public class memoryGUI {
 
 	private JFrame frame;
 	private JTextField App2Launch;
 	private int processCount = 0;
 	private JTextField ProcStatus;
+	private JTextField processSize;
 	/**
 	 * Launch the application.
 	 */
@@ -69,7 +74,7 @@ public class memoryGUI {
 		 * Process to Launch
 		 */
 		App2Launch = new JTextField();
-		App2Launch.setBounds(39, 559, 116, 22);
+		App2Launch.setBounds(39, 539, 116, 22);
 		frame.getContentPane().add(App2Launch);
 		App2Launch.setColumns(10);
 		
@@ -77,6 +82,11 @@ public class memoryGUI {
 		ProcStatus.setBounds(454, 559, 63, 22);
 		frame.getContentPane().add(ProcStatus);
 		ProcStatus.setColumns(10);
+		
+		processSize = new JTextField();
+		processSize.setBounds(39, 581, 116, 22);
+		frame.getContentPane().add(processSize);
+		processSize.setColumns(10);
 		
 		/**
 		 * Process List
@@ -114,9 +124,7 @@ public class memoryGUI {
 		ProcessInfo.setBounds(663, 415, 279, 178);
 		frame.getContentPane().add(ProcessInfo);
 		
-		ProcessList.setText(process.toListString(processes));
-//		Running.setText(Partition.toListString(partitions,"used"));
-//		Partitions.setText(Partition.toListString(partitions, "free"));
+		Partitions.setText(Partition.toListString(partitions, "free"));
 		
 //======================================================================
 		/**
@@ -127,9 +135,16 @@ public class memoryGUI {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean allocated = false;
 				if (!App2Launch.getText().contentEquals("")) {
-					processes.add(new process(App2Launch.getText(), processCount - 57));
+					
+					//Size specified
+					if(!processSize.getText().equals(""))
+						processes.add(new process(App2Launch.getText(), processCount - 57,
+								Integer.parseInt(processSize.getText())));
+					//Size Auto generated
+					else
+						processes.add(new process(App2Launch.getText(), processCount - 57));
 					processCount++;
-					App2Launch.setText("");
+
 				
 					//check if process fits in a partition
 					for (process check: processes) {
@@ -143,6 +158,7 @@ public class memoryGUI {
 					}
 				
 				
+					App2Launch.setText("");
 					//update output
 					ProcessList.setText(process.toListString(processes));
 					Running.setText(Partition.toListString(partitions,"used"));
@@ -171,7 +187,6 @@ public class memoryGUI {
 							if(f.getUsedSpace() == (processes.get(p).getSize()))
 								f.resetPartition();
 						}
-//						partitions.get(processes.get(p).getwhichBlock()).resetPartition();
 						
 						//remove process
 						processes.remove(p);
@@ -235,7 +250,7 @@ public class memoryGUI {
 		
 
 		JLabel lblProcess = new JLabel("Process");
-		lblProcess.setBounds(39, 542, 56, 16);
+		lblProcess.setBounds(39, 519, 56, 16);
 		frame.getContentPane().add(lblProcess);
 		
 		JLabel lblProcesses = new JLabel("Processes");
@@ -254,16 +269,10 @@ public class memoryGUI {
 		lblProcessInformation.setBounds(663, 396, 116, 16);
 		frame.getContentPane().add(lblProcessInformation);
 		
-		JTextPane Numbers = new JTextPane();
-		Numbers.setBounds(12, 52, 28, 435);
-		frame.getContentPane().add(Numbers);
-		
 		String f = "";
 		for (int i = 1; i < 35; i++) {
 			f += Integer.toString(i) + '\n';
 		}
-		
-		Numbers.setText(f);
 		
 		JLabel label = new JLabel("#");
 		label.setBounds(12, 25, 56, 16);
@@ -272,6 +281,16 @@ public class memoryGUI {
 		JLabel lblEnterProcess = new JLabel("Enter Process # to LookUp");
 		lblEnterProcess.setBounds(454, 542, 158, 16);
 		frame.getContentPane().add(lblEnterProcess);
+		
+		JLabel lblSize = new JLabel("Size (Mb)");
+		lblSize.setBounds(39, 562, 56, 16);
+		frame.getContentPane().add(lblSize);
+		
+		JTextPane Numbers = new JTextPane();
+		Numbers.setBounds(12, 52, 28, 435);
+		frame.getContentPane().add(Numbers);
+		
+		Numbers.setText(f);
 		
 		JTextPane txtpngbMachine = new JTextPane();
 		txtpngbMachine.setBackground(new Color(245, 245, 245));

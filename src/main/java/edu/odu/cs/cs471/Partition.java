@@ -2,7 +2,11 @@ package edu.odu.cs.cs471;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Object Class for Memory Partition Object
+ * @author Christopher Diasanta
+ *
+ */
 public class Partition {
 	
 	private int id;

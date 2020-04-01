@@ -4,7 +4,11 @@ import java.util.List;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
-
+/**
+ * Object Class for Process Object
+ * @author Chris
+ *
+ */
 public class process {
 	
 	private String ProcessName;
@@ -38,6 +42,22 @@ public class process {
 		ProcessName = procNme;
 		ProcessNum = procNum;
 		size = genSize();
+		pageNum = 0;
+		location = "";
+		inUse = false;
+		whichBlock = 0;
+	}
+	
+	/**
+	 * Constructor with Size
+	 * @param procNme
+	 * @param procNum
+	 * @param pSize
+	 */
+	public process (String procNme, int procNum, double pSize) {
+		ProcessName = procNme;
+		ProcessNum = procNum;
+		size = pSize;
 		pageNum = 0;
 		location = "";
 		inUse = false;
