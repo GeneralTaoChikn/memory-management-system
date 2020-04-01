@@ -133,6 +133,9 @@ public class memoryGUI {
 		btnTerminate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				//TODO Remove a running process
+				//Run next process
+				
 				
 				int p = 0;
 				boolean rmvElement = false;
@@ -175,21 +178,25 @@ public class memoryGUI {
 		JButton btnStatus = new JButton("Status");
 		btnStatus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int n = Integer.parseInt(ProcStatus.getText());
-				int i = 0;
-				do {
-					if ((processes.get(i).getProcNum() != n))
-						i++;
-					else
-						ProcessInfo.setText(processes.get(i-1).toString(""));
-					
-				}while((i < processes.size()) &&(processes.get(i).getProcNum() != n));
-//				for (int i = 0; i < processes.size(); i++) {
-//					if (Integer.compare(processes.get(i).getProcNum(), n))
-//						ProcessInfo.setText(processes.get(i).toString(""));
-//				}
-//				
-				ProcStatus.setText("");
+//				int n = Integer.parseInt(ProcStatus.getText());
+//				int i = 0;
+//				do {
+//					if ((processes.get(i).getProcNum() != n))
+//						i++;
+//					else
+//						ProcessInfo.setText(processes.get(i-1).toString(""));
+//					
+//				}while((i < processes.size()) &&(processes.get(i).getProcNum() != n));
+////				for (int i = 0; i < processes.size(); i++) {
+////					if (Integer.compare(processes.get(i).getProcNum(), n))
+////						ProcessInfo.setText(processes.get(i).toString(""));
+////				}
+////		
+				if(ProcStatus.getText() != "") {
+					int n = Integer.parseInt(ProcStatus.getText());
+					ProcessInfo.setText(processes.get(n).toString(""));
+					ProcStatus.setText("");
+				}
 			}
 		});
 		btnStatus.setBounds(529, 558, 97, 25);

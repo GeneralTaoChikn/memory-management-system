@@ -10,7 +10,8 @@ public class Partition {
 	private double occupiedSpace;
 	private double freeSpace;
 	private boolean occupied;
-	
+//======================================================================
+///Constructors
 	/**
 	 * Default Constructor
 	 */
@@ -35,12 +36,12 @@ public class Partition {
 		occupied = false;
 		
 	}
-	
-//	public void setID(int ID) {
-//		this.id = ID;
-//		
-//	}
-//	
+//======================================================================
+///Setters
+	/**
+	 * Assign FreeSpace
+	 * @param fs
+	 */
 	public void setfreeSpace(double fs) {
 		this.freeSpace = this.freeSpace - fs;
 		this.occupiedSpace = fs;
@@ -54,15 +55,17 @@ public class Partition {
 		this.occupied = a;
 	}
 	
+	/**
+	 * Set wich process it is assigned to
+	 * @param proc
+	 */
 	public void setassignedTo (String proc) {
 		this.assignedTo = proc;
 	}
 
-
-	/**
-	 * There should be an ID on a block
-	 * @return id
-	 */
+//======================================================================
+///Getters
+	
 	public int getId() {
 		return this.id;
 	}
@@ -71,36 +74,46 @@ public class Partition {
 		return this.occupied;
 	}
 	
-	
-	/**
-	 * This would be used to determine if process can be run
-	 * @return amount of free space
-	 */
 	public double getfreeSpace() {
 		return this.freeSpace;
 	}
+	
+//======================================================================
+	
 	
 	public void resetPartition () {
 		this.assignedTo = "";
 		this.freeSpace = freeSpace + occupiedSpace;
 		this.occupiedSpace = 0;
-		this.occupied = false;
+		this.occupied = false;	
+	}
+	
+	public Partition splitPartition (Partition toSplit) {
+		Partition newPart = new Partition();
+		//TODO Split an existing partion
 		
+		
+		return newPart;
+	}
+	
+	public void collectGarbage () {
+		//TODO Implement an Algorithm to best compact garbage.
+		//Take free space from occupied memory and put it back into main
 		
 	}
 	
 	public String toString() {
 		//print List
-		String use = "";
-		if (this.occupied)
-			use = "inUse";
-		else
-			use = "UnUsed";
+//		String use = "";
+//		if (this.occupied)
+//			use = "inUse";
+//		else
+//			use = "UnUsed";
 		
 		return "Partition ID: " + this.id + "  " +
 				"UsedSpace: " + this.occupiedSpace + "  " +
 				"FreeSpace: " + this.freeSpace + "  " + 
-				use +  "allocated toproce Num: " + assignedTo + '\n' + '\n';
+				"allocated toproce Num: " + assignedTo + '\n' + '\n';
 				
 	}
 	

@@ -13,6 +13,8 @@ public class process {
 	private boolean inUse;
 	private int whichBlock;
 	
+//======================================================================
+///Constructors
 	/**
 	 * Default Constructor
 	 */
@@ -39,21 +41,22 @@ public class process {
 		inUse = false;
 		whichBlock = -1;
 	}
+//======================================================================
+///Setters
+	/**
+	 * Sets the process Name
+	 * @param process
+	 */
+	public void setProcName (String process) {
+		this.ProcessName = process;
+	}
 	
-//	/**
-//	 * Sets the process Name
-//	 * @param process
-//	 */
-//	public void setProcName (String process) {
-//		this.ProcessName = process;
-//	}
-//	
-//	/**
-//	 * TODO generate a random size
-//	 */
-//	public void setSize () {
-//		
-//	}
+	/**
+	 * TODO generate a random size
+	 */
+	public void setSize (double s) {
+		this.size = s;
+	}
 	
 	/**
 	 * TODO generate random PageNumber
@@ -80,14 +83,13 @@ public class process {
 	public void setwichBlock (int block) {
 		this.whichBlock = block;
 	}
+//======================================================================
+///Getters
 	
-//	/**
-//	 * Retrieve Process Name
-//	 * @return process name
-//	 */
-//	public String getProcName () {
-//		return this.ProcessName;
-//	}
+
+	public String getProcName () {
+		return this.ProcessName;
+	}
 	
 	public int getProcNum () {
 		return this.ProcessNum;
@@ -101,6 +103,8 @@ public class process {
 		return this.whichBlock;
 	}
 	
+//======================================================================
+	
 	/**@override
 	 * Prints out characteristics of Process
 	 * @return process characteristics
@@ -108,13 +112,13 @@ public class process {
 	public String toString(String toPrint) {
 		//print List
 		if (toPrint.equals("List"))
-			return this.ProcessNum +':' +" Process : " + this.ProcessName + "  " +
+			return this.ProcessNum +':' +" Process: " + this.ProcessName + "  " +
 				"Size: " + this.size + " Kb" + '\n';
 		
 		//Print Status
 		else
 			return "Process Name: " + this.ProcessName + '\n' +
-				"Size: " + this.size + '\n' +
+				"Size: " + this.size + "Kb \n" +
 				"Page #: " + this.pageNum + '\n' +
 				"Location: " + this.location ;
 				
