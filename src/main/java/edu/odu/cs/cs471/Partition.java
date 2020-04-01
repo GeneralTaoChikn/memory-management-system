@@ -82,6 +82,10 @@ public class Partition {
 		return this.freeSpace;
 	}
 	
+	public double getUsedSpace() {
+		return this.occupiedSpace;
+	}
+	
 //======================================================================
 	
 	

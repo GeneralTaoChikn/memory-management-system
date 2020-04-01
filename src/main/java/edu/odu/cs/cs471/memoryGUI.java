@@ -4,10 +4,9 @@ import java.awt.EventQueue;
 
 import javax.swing.JPanel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
-
 import java.awt.BorderLayout;
 
+import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -127,31 +126,31 @@ public class memoryGUI {
 		btnLaunch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				boolean allocated = false;
-				//add Process
-//				processes.add(new process(App2Launch.getText(), processes.size() - 57));
-				processes.add(new process(App2Launch.getText(), processCount - 57));
-				processCount++;
-				App2Launch.setText("");
+				if (!App2Launch.getText().contentEquals("")) {
+					processes.add(new process(App2Launch.getText(), processCount - 57));
+					processCount++;
+					App2Launch.setText("");
 				
-				//check if process fits in a partition
-				for (process check: processes) {
-					if(check.getinUse() == false )
-						allocated = check.checkifPartittionFits(partitions);
+					//check if process fits in a partition
+					for (process check: processes) {
+						if(check.getinUse() == false )
+							allocated = check.checkifPartittionFits(partitions);
+					}
+				
+					if (allocated == false) {
+						JOptionPane.showMessageDialog(null, "Insufficient Memory: " + 
+								" cannot run", "Ohhh NO! Error!", JOptionPane.INFORMATION_MESSAGE);
+					}
+				
+				
+					//update output
+					ProcessList.setText(process.toListString(processes));
+					Running.setText(Partition.toListString(partitions,"used"));
+					Partitions.setText(Partition.toListString(partitions, "free"));
 				}
-				
-				if (allocated == false) {
-					JOptionPane.showMessageDialog(null, "Insufficient Memory: " + 
-							" cannot run", "Ohhh NO! Error!", JOptionPane.INFORMATION_MESSAGE);
-				}
-				
-				
-				//update output
-				ProcessList.setText(process.toListString(processes));
-				Running.setText(Partition.toListString(partitions,"used"));
-				Partitions.setText(Partition.toListString(partitions, "free"));
 			}
 		});
-		btnLaunch.setBounds(204, 558, 97, 25);
+		btnLaunch.setBounds(167, 558, 97, 25);
 		frame.getContentPane().add(btnLaunch);
 		
 		/**
@@ -168,15 +167,19 @@ public class memoryGUI {
 					if (processes.get(p).getinUse() == true) {
 						
 						//reset allocated partition
-						partitions.get(processes.get(p).getwhichBlock()).resetPartition();
-						Running.setText(Partition.toListString(partitions, "used"));
+						for(Partition f: partitions) {
+							if(f.getUsedSpace() == (processes.get(p).getSize()))
+								f.resetPartition();
+						}
+//						partitions.get(processes.get(p).getwhichBlock()).resetPartition();
 						
 						//remove process
 						processes.remove(p);
 						//if executed, exit while loop
 						rmvElement = true;
 						for (int i = 0; i < processes.size(); i++) {
-							processes.get(i).checkifPartittionFits(partitions);
+							if(processes.get(i).getinUse() == false)
+								processes.get(i).checkifPartittionFits(partitions);
 						}
 					}
 					
@@ -190,7 +193,7 @@ public class memoryGUI {
 				
 			}
 		});
-		btnTerminate.setBounds(311, 558, 97, 25);
+		btnTerminate.setBounds(293, 558, 97, 25);
 		frame.getContentPane().add(btnTerminate);
 		
 		
@@ -201,7 +204,7 @@ public class memoryGUI {
 		btnStatus.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 		
-				if(ProcStatus.getText() != "") {
+				if(!ProcStatus.getText().equals("")) {
 					int n = Integer.parseInt(ProcStatus.getText());
 					ProcessInfo.setText(processes.get(n-1).toString(""));
 					ProcStatus.setText("");
@@ -214,7 +217,7 @@ public class memoryGUI {
 		/**
 		 * Garbage
 		 */
-		JButton btnGarbage = new JButton("Garbage");
+		JButton btnGarbage = new JButton("Compact Garbage");
 		btnGarbage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Partition.collectGarbage(partitions);
@@ -222,7 +225,7 @@ public class memoryGUI {
 				Partitions.setText(Partition.toListString(partitions, "free"));
 			}
 		});
-		btnGarbage.setBounds(529, 511, 89, 23);
+		btnGarbage.setBounds(482, 500, 152, 23);
 		frame.getContentPane().add(btnGarbage);
 		
 //======================================================================
@@ -240,7 +243,7 @@ public class memoryGUI {
 		frame.getContentPane().add(lblProcesses);
 		
 		JLabel lblUsed = new JLabel("Blockes Used & Processes");
-		lblUsed.setBounds(355, 25, 220, 16);
+		lblUsed.setBounds(329, 23, 220, 16);
 		frame.getContentPane().add(lblUsed);
 		
 		JLabel lblFreeBlocks = new JLabel("Free Blocks");
@@ -261,6 +264,20 @@ public class memoryGUI {
 		}
 		
 		Numbers.setText(f);
+		
+		JLabel label = new JLabel("#");
+		label.setBounds(12, 25, 56, 16);
+		frame.getContentPane().add(label);
+		
+		JLabel lblEnterProcess = new JLabel("Enter Process # to LookUp");
+		lblEnterProcess.setBounds(454, 542, 158, 16);
+		frame.getContentPane().add(lblEnterProcess);
+		
+		JTextPane txtpngbMachine = new JTextPane();
+		txtpngbMachine.setBackground(new Color(245, 245, 245));
+		txtpngbMachine.setText("2Gb Machine ( 1.55 Gb usable )\r\n(498Mb OS) (1550Mb Usable)");
+		txtpngbMachine.setBounds(742, 13, 194, 46);
+		frame.getContentPane().add(txtpngbMachine);
 
 	}
 }

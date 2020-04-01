@@ -90,6 +90,9 @@ public class process {
 		return this.ProcessNum;
 	}
 	
+	public double getSize() {
+		return this.size;
+	}
 	public boolean getinUse () {
 		return this.inUse;
 	}
@@ -113,7 +116,7 @@ public class process {
 		//Print Status
 		else
 			return "Process Name: " + this.ProcessName + '\n' +
-				"Size: " + this.size + "Kb \n" +
+				"Size: " + this.size + "Mb \n" +
 				"Page #: " + this.pageNum + '\n' +
 				"Location: " + this.location ;
 				
@@ -146,7 +149,6 @@ public class process {
 			if ((doesItFit.get(i).getOccupied() == false) && (allocated == false)) {
 				if(doesItFit.get(i).getfreeSpace() > this.size) {
 					doesItFit.get(i).setOccupied(true);
-//					doesItFit.get(i).setassignedTo(Integer.toString(this.ProcessNum+58));
 					doesItFit.get(i).setassignedTo(this.ProcessName);
 					doesItFit.get(i).setOcSpace(this.size);
 					doesItFit.add(doesItFit.get(i).splitPartition(doesItFit.size()));
@@ -163,12 +165,6 @@ public class process {
 				}
 			}	
 		}
-		
-//		if (allocated == false) {
-//			//Throw error message
-//			JOptionPane.showMessageDialog(null, "Insufficient Memory: " + this.ProcessName + 
-//					" cannot run", "Ohhh NO! Error!", JOptionPane.INFORMATION_MESSAGE);
-//		}
 		
 		return allocated;
 
