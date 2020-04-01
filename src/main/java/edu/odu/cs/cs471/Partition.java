@@ -93,12 +93,17 @@ public class Partition {
 		//TODO Split an existing partion
 		
 		
+		
 		return newPart;
 	}
 	
-	public void collectGarbage () {
+	public void collectGarbage (Partition toCollect) {
 		//TODO Implement an Algorithm to best compact garbage.
 		//Take free space from occupied memory and put it back into main
+			
+		//Collects Free Space from the unallocated data
+		this.freeSpace = this.freeSpace + toCollect.getfreeSpace();
+		toCollect.setfreeSpace(0);
 		
 	}
 	
@@ -113,7 +118,7 @@ public class Partition {
 		return "Partition ID: " + this.id + "  " +
 				"UsedSpace: " + this.occupiedSpace + "  " +
 				"FreeSpace: " + this.freeSpace + "  " + 
-				"allocated toproce Num: " + assignedTo + '\n' + '\n';
+				"Assigned To: " + assignedTo + '\n' + '\n';
 				
 	}
 	

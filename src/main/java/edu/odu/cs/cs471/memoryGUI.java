@@ -2,10 +2,11 @@ package edu.odu.cs.cs471;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JList;
 import java.awt.BorderLayout;
+
+import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -53,7 +54,11 @@ public class memoryGUI {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		List <Partition> partitions = Partition.prepopulate();
+//		List <Partition> partitions = Partition.prepopulate();
+		List <Partition> partitions = new ArrayList<Partition> ();
+		partitions.clear();
+		partitions.add(new Partition (partitions.size(), 512));
+		
 		List <process> processes = new ArrayList<process> ();
 		processes.clear();
 		
@@ -108,7 +113,7 @@ public class memoryGUI {
 			public void actionPerformed(ActionEvent arg0) {
 				//add Process
 //				processes.add(new process(App2Launch.getText(), processes.size() - 57));
-				processes.add(new process(App2Launch.getText(), processCount - 57));
+				processes.add(new process(App2Launch.getText(), processCount));
 				processCount++;
 				App2Launch.setText("");
 				

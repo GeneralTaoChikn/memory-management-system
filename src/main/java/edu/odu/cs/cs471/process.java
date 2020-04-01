@@ -141,18 +141,26 @@ public class process {
 	
 	public void checkifPartittionFits (List<Partition> doesItFit) {
 		boolean allocated = false;
-		
+
 		for (int i = 0; i < doesItFit.size(); i++) {
 
-			if ((doesItFit.get(i).getOccupied() == false) && (allocated == false))
-			if(doesItFit.get(i).getfreeSpace() > this.size) {
-				doesItFit.get(i).setOccupied(true);
-				doesItFit.get(i).setassignedTo(Integer.toString(this.ProcessNum+58));
-				doesItFit.get(i).setfreeSpace(this.size);				
-				this.inUse = true;		
-				this.whichBlock = i;
-				allocated = true;
-			}
+			if ((doesItFit.get(i).getOccupied() == false) && (allocated == false)) {
+				if(doesItFit.get(i).getfreeSpace() > this.size) {
+					doesItFit.get(i).setOccupied(true);
+					doesItFit.get(i).setassignedTo(Integer.toString(this.ProcessNum+58));
+					doesItFit.get(i).setfreeSpace(this.size);
+					this.pageNum = 0;
+					this.location = "Main Memory";
+					this.inUse = true;		
+					this.whichBlock = i;
+					allocated = true;
+				}
+				else {
+					this.location = "Virtual";
+					this.pageNum = process.genSize();
+					
+				}
+			}	
 		}
 
 	}
@@ -169,7 +177,7 @@ public class process {
         int rand_int; 
         // Generate random integers in range 0 to 5 
         do {
-        	rand_int = rand.nextInt(1000) % 800; 
+        	rand_int = rand.nextInt(1000) % 20 ; 
         }while (rand_int < 120);
  
         return rand_int;
